@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1400">
+  <defs>
+    <linearGradient id="startEnd" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981"/>
+      <stop offset="100%" style="stop-color:#059669"/>
+    </linearGradient>
+    <linearGradient id="process" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6"/>
+      <stop offset="100%" style="stop-color:#2563EB"/>
+    </linearGradient>
+    <linearGradient id="decision" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F59E0B"/>
+      <stop offset="100%" style="stop-color:#D97706"/>
+    </linearGradient>
+    <linearGradient id="loop" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6"/>
+      <stop offset="100%" style="stop-color:#7C3AED"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1000" height="1400" fill="#F8FAFC"/>
+  
+  <!-- Title -->
+  <text x="500" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#1E293B" text-anchor="middle">MAIN PROCESS FLOWCHART</text>
+  
+  <!-- START -->
+  <ellipse cx="500" cy="100" rx="60" ry="30" fill="url(#startEnd)"/>
+  <text x="500" y="107" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white" text-anchor="middle">START</text>
+  
+  <!-- Arrow -->
+  <line x1="500" y1="130" x2="500" y2="170" stroke="#64748B" stroke-width="2"/>
+  <polygon points="500,180 495,170 505,170" fill="#64748B"/>
+  
+  <!-- Initialize -->
+  <rect x="350" y="180" width="300" height="60" rx="10" fill="url(#process)"/>
+  <text x="500" y="215" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">1. INITIALIZE</text>
+  <text x="500" y="230" font-family="Arial, sans-serif" font-size="11" fill="#DBEAFE" text-anchor="middle">Variables, DataTable, Config</text>
+  
+  <!-- Arrow -->
+  <line x1="500" y1="240" x2="500" y2="280" stroke="#64748B" stroke-width="2"/>
+  <polygon points="500,290 495,280 505,280" fill="#64748B"/>
+  
+  <!-- Get PDF Files -->
+  <rect x="350" y="290" width="300" height="60" rx="10" fill="url(#process)"/>
+  <text x="500" y="325" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">2. GET PDF FILES</text>
+  <text x="500" y="340" font-family="Arial, sans-serif" font-size="11" fill="#DBEAFE" text-anchor="middle">Directory.GetFiles(*.pdf)</text>
+  
+  <!-- Arrow -->
+  <line x1="500" y1="350" x2="500" y2="390" stroke="#64748B" stroke-width="2"/>
+  <polygon points="500,400 495,390 505,390" fill="#64748B"/>
+  
+  <!-- Create Account -->
+  <rect x="350" y="400" width="300" height="60" rx="10" fill="url(#process)"/>
+  <text x="500" y="435" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">3. CREATE UIBANK ACCOUNT</text>
+  <text x="500" y="450" font-family="Arial, sans-serif" font-size="11" fill="#DBEAFE" text-anchor="middle">Auto-generate credentials</text>
+  
+  <!-- Arrow -->
+  <line x1="500" y1="460" x2="500" y2="500" stroke="#64748B" stroke-width="2"/>
+  <polygon points="500,510 495,500 505,500" fill="#64748B"/>
+  
+  <!-- For Each Loop -->
+  <rect x="300" y="510" width="400" height="500" rx="15" fill="url(#loop)" fill-opacity="0.1" stroke="#8B5CF6" stroke-width="3" stroke-dasharray="10,5"/>
+  <text x="500" y="540" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#7C3AED" text-anchor="middle">🔄 FOR EACH PDF IN PDFFiles</text>
+  
+  <!-- Read PDF -->
+  <rect x="350" y="560" width="300" height="50" rx="8" fill="url(#process)"/>
+  <text x="500" y="590" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">4a. READ PDF TEXT</text>
+  
+  <!-- Arrow -->
+  <line x1="500" y1="610" x2="500" y2="640" stroke="#64748B" stroke-width="2"/>
+  <polygon points="500,650 495,640 505,640" fill="#64748B"/>
+  
+  <!-- Extract Data -->
+  <rect x="350" y="650" width="300" height="50" rx="8" fill="url(#process)"/>
+  <text x="500" y="680" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">4b. EXTRACT DATA (Regex)</text>
+  
+  <!-- Arrow -->
+  <line x1="500" y1="700" x2="500" y2="730" stroke="#64748B" stroke-width="2"/>
+  <polygon points="500,740 495,730 505,730" fill="#64748B"/>
+  
+  <!-- Convert Currency -->
+  <rect x="350" y="740" width="300" height="50" rx="8" fill="url(#process)"/>
+  <text x="500" y="770" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">4c. CONVERT TO USD</text>
+  
+  <!-- Arrow -->
+  <line x1="500" y1="790" x2="500" y2="820" stroke="#64748B" stroke-width="2"/>
+  <polygon points="500,830 495,820 505,820" fill="#64748B"/>
+  
+  <!-- Decision Diamond -->
+  <polygon points="500,830 600,880 500,930 400,880" fill="url(#decision)"/>
+  <text x="500" y="875" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">APPROVED?</text>
+  <text x="500" y="890" font-family="Arial, sans-serif" font-size="10" fill="#FEF3C7" text-anchor="middle">(PDF Decision)</text>
+  
+  <!-- Yes Arrow -->
+  <line x1="600" y1="880" x2="700" y2="880" stroke="#10B981" stroke-width="2"/>
+  <text x="640" y="870" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#10B981">YES</text>
+  <line x1="700" y1="880" x2="700" y2="920" stroke="#10B981" stroke-width="2"/>
+  
+  <!-- Submit to UiBank -->
+  <rect x="620" y="920" width="160" height="40" rx="6" fill="#10B981"/>
+  <text x="700" y="945" font-family="Arial, sans-serif" font-size="11" fill="white" text-anchor="middle">Submit to UiBank</text>
+  
+  <!-- No Arrow -->
+  <line x1="400" y1="880" x2="300" y2="880" stroke="#EF4444" stroke-width="2"/>
+  <text x="360" y="870" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#EF4444">NO</text>
+  <line x1="300" y1="880" x2="300" y2="920" stroke="#EF4444" stroke-width="2"/>
+  
+  <!-- Skip -->
+  <rect x="220" y="920" width="160" height="40" rx="6" fill="#EF4444"/>
+  <text x="300" y="945" font-family="Arial, sans-serif" font-size="11" fill="white" text-anchor="middle">Mark as SKIPPED</text>
+  
+  <!-- Merge arrows -->
+  <line x1="300" y1="960" x2="300" y2="980" stroke="#64748B" stroke-width="2"/>
+  <line x1="700" y1="960" x2="700" y2="980" stroke="#64748B" stroke-width="2"/>
+  <line x1="300" y1="980" x2="700" y2="980" stroke="#64748B" stroke-width="2"/>
+  <line x1="500" y1="980" x2="500" y2="1000" stroke="#64748B" stroke-width="2"/>
+  
+  <!-- Arrow to loop back or continue -->
+  <line x1="500" y1="1000" x2="500" y2="1020" stroke="#64748B" stroke-width="2"/>
+  <polygon points="500,1030 495,1020 505,1020" fill="#64748B"/>
+  
+  <!-- Loop back arrow -->
+  <path d="M 710 770 L 750 770 L 750 550 L 710 550" stroke="#8B5CF6" stroke-width="2" fill="none" stroke-dasharray="5,3"/>
+  <text x="765" y="660" font-family="Arial, sans-serif" font-size="10" fill="#8B5CF6" transform="rotate(90 765 660)">Next PDF</text>
+  
+  <!-- Write Excel -->
+  <rect x="350" y="1050" width="300" height="60" rx="10" fill="url(#process)"/>
+  <text x="500" y="1085" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">5. WRITE EXCEL REPORT</text>
+  <text x="500" y="1100" font-family="Arial, sans-serif" font-size="11" fill="#DBEAFE" text-anchor="middle">LoanResults.xlsx</text>
+  
+  <!-- Arrow -->
+  <line x1="500" y1="1110" x2="500" y2="1150" stroke="#64748B" stroke-width="2"/>
+  <polygon points="500,1160 495,1150 505,1150" fill="#64748B"/>
+  
+  <!-- Show Summary -->
+  <rect x="350" y="1160" width="300" height="60" rx="10" fill="url(#process)"/>
+  <text x="500" y="1195" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">6. SHOW SUMMARY</text>
+  <text x="500" y="1210" font-family="Arial, sans-serif" font-size="11" fill="#DBEAFE" text-anchor="middle">Message Box with results</text>
+  
+  <!-- Arrow -->
+  <line x1="500" y1="1220" x2="500" y2="1260" stroke="#64748B" stroke-width="2"/>
+  <polygon points="500,1270 495,1260 505,1260" fill="#64748B"/>
+  
+  <!-- END -->
+  <ellipse cx="500" cy="1300" rx="60" ry="30" fill="url(#startEnd)"/>
+  <text x="500" y="1307" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white" text-anchor="middle">END</text>
+  
+  <!-- Legend -->
+  <rect x="50" y="1340" width="900" height="50" rx="8" fill="#F1F5F9" stroke="#CBD5E1"/>
+  <text x="80" y="1370" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#334155">LEGEND:</text>
+  <ellipse cx="180" cy="1365" rx="20" ry="12" fill="url(#startEnd)"/>
+  <text x="210" y="1370" font-family="Arial, sans-serif" font-size="11" fill="#475569">Start/End</text>
+  <rect x="280" y="1355" width="30" height="20" rx="4" fill="url(#process)"/>
+  <text x="320" y="1370" font-family="Arial, sans-serif" font-size="11" fill="#475569">Process</text>
+  <polygon points="420,1365 440,1355 460,1365 440,1375" fill="url(#decision)"/>
+  <text x="470" y="1370" font-family="Arial, sans-serif" font-size="11" fill="#475569">Decision</text>
+  <rect x="550" y="1355" width="30" height="20" rx="4" fill="none" stroke="#8B5CF6" stroke-width="2" stroke-dasharray="3,2"/>
+  <text x="590" y="1370" font-family="Arial, sans-serif" font-size="11" fill="#475569">Loop</text>
+</svg>

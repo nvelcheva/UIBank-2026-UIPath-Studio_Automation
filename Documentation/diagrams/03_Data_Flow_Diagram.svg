@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700">
+  <defs>
+    <linearGradient id="pdfGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#EF4444"/>
+      <stop offset="100%" style="stop-color:#DC2626"/>
+    </linearGradient>
+    <linearGradient id="dataGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6"/>
+      <stop offset="100%" style="stop-color:#2563EB"/>
+    </linearGradient>
+    <linearGradient id="convertGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F59E0B"/>
+      <stop offset="100%" style="stop-color:#D97706"/>
+    </linearGradient>
+    <linearGradient id="excelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981"/>
+      <stop offset="100%" style="stop-color:#059669"/>
+    </linearGradient>
+  </defs>
+  
+  <rect width="1200" height="700" fill="#F8FAFC"/>
+  
+  <text x="600" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#1E293B" text-anchor="middle">DATA FLOW DIAGRAM</text>
+  
+  <!-- PDF Source -->
+  <rect x="50" y="100" width="200" height="250" rx="10" fill="url(#pdfGrad)"/>
+  <text x="150" y="140" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white" text-anchor="middle">📄 PDF SOURCE</text>
+  <text x="150" y="170" font-family="Arial, sans-serif" font-size="11" fill="#FEE2E2" text-anchor="middle">───────────────</text>
+  <text x="150" y="195" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Application ID: US42851</text>
+  <text x="150" y="215" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Email: john@email.com</text>
+  <text x="150" y="235" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Age: 35</text>
+  <text x="150" y="255" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Country: Germany</text>
+  <text x="150" y="275" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Income: EUR 75,000</text>
+  <text x="150" y="295" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Amount: EUR 50,000</text>
+  <text x="150" y="315" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Interest: 5.5%</text>
+  <text x="150" y="335" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Decision: APPROVED</text>
+  
+  <!-- Arrow 1 -->
+  <path d="M 260 225 L 340 225" stroke="#64748B" stroke-width="3" fill="none"/>
+  <polygon points="350,225 340,220 340,230" fill="#64748B"/>
+  <text x="300" y="215" font-family="Arial, sans-serif" font-size="10" fill="#64748B" text-anchor="middle">REGEX</text>
+  <text x="300" y="240" font-family="Arial, sans-serif" font-size="10" fill="#64748B" text-anchor="middle">Extract</text>
+  
+  <!-- Extracted Data -->
+  <rect x="360" y="100" width="220" height="250" rx="10" fill="url(#dataGrad)"/>
+  <text x="470" y="140" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white" text-anchor="middle">🔍 EXTRACTED</text>
+  <text x="470" y="170" font-family="Arial, sans-serif" font-size="11" fill="#DBEAFE" text-anchor="middle">───────────────</text>
+  <text x="470" y="195" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">ApplicationID = "US42851"</text>
+  <text x="470" y="215" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Email = "john@email.com"</text>
+  <text x="470" y="235" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Age = "35"</text>
+  <text x="470" y="255" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Country = "Germany"</text>
+  <text x="470" y="275" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">YearlyIncome = "75000"</text>
+  <text x="470" y="295" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Currency = "EUR"</text>
+  <text x="470" y="315" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">RequestedAmount = "50000"</text>
+  <text x="470" y="335" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">PDFDecision = "APPROVED"</text>
+  
+  <!-- Arrow 2 -->
+  <path d="M 590 225 L 670 225" stroke="#64748B" stroke-width="3" fill="none"/>
+  <polygon points="680,225 670,220 670,230" fill="#64748B"/>
+  <text x="630" y="215" font-family="Arial, sans-serif" font-size="10" fill="#64748B" text-anchor="middle">Currency</text>
+  <text x="630" y="240" font-family="Arial, sans-serif" font-size="10" fill="#64748B" text-anchor="middle">Convert</text>
+  
+  <!-- Converted Data -->
+  <rect x="690" y="100" width="220" height="250" rx="10" fill="url(#convertGrad)"/>
+  <text x="800" y="140" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white" text-anchor="middle">💱 CONVERTED</text>
+  <text x="800" y="170" font-family="Arial, sans-serif" font-size="11" fill="#FEF3C7" text-anchor="middle">───────────────</text>
+  <text x="800" y="195" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">EUR → USD (Rate: 0.92)</text>
+  <text x="800" y="225" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">────────────────</text>
+  <text x="800" y="255" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">75,000 EUR</text>
+  <text x="800" y="275" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">÷ 0.92</text>
+  <text x="800" y="295" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">= $81,521.74 USD</text>
+  <text x="800" y="325" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">AmountUSD = $54,347.83</text>
+  <text x="800" y="345" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">IncomeUSD = $81,521.74</text>
+  
+  <!-- Arrow 3 -->
+  <path d="M 920 225 L 1000 225" stroke="#64748B" stroke-width="3" fill="none"/>
+  <polygon points="1010,225 1000,220 1000,230" fill="#64748B"/>
+  <text x="960" y="215" font-family="Arial, sans-serif" font-size="10" fill="#64748B" text-anchor="middle">Write</text>
+  <text x="960" y="240" font-family="Arial, sans-serif" font-size="10" fill="#64748B" text-anchor="middle">Excel</text>
+  
+  <!-- Excel Output -->
+  <rect x="1020" y="100" width="150" height="250" rx="10" fill="url(#excelGrad)"/>
+  <text x="1095" y="140" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white" text-anchor="middle">📊 EXCEL</text>
+  <text x="1095" y="170" font-family="Arial, sans-serif" font-size="11" fill="#D1FAE5" text-anchor="middle">─────────</text>
+  <text x="1095" y="200" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">14 Columns</text>
+  <text x="1095" y="220" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">100 Rows</text>
+  <text x="1095" y="250" font-family="Arial, sans-serif" font-size="9" fill="#D1FAE5" text-anchor="middle">─────────</text>
+  <text x="1095" y="275" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">• ApplicationID</text>
+  <text x="1095" y="290" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">• Email</text>
+  <text x="1095" y="305" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">• AmountUSD</text>
+  <text x="1095" y="320" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">• Status</text>
+  <text x="1095" y="335" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">• ...</text>
+  
+  <!-- Bottom transformation formula -->
+  <rect x="100" y="420" width="1000" height="120" rx="10" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+  <text x="600" y="460" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#334155" text-anchor="middle">TRANSFORMATION FORMULA</text>
+  <text x="600" y="500" font-family="monospace" font-size="14" fill="#1E293B" text-anchor="middle">AmountUSD = OriginalAmount ÷ ExchangeRate</text>
+  <text x="600" y="525" font-family="monospace" font-size="12" fill="#64748B" text-anchor="middle">Example: 50,000 EUR ÷ 0.92 = $54,347.83 USD</text>
+  
+  <!-- Currency rates table -->
+  <rect x="100" y="560" width="1000" height="120" rx="10" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>
+  <text x="600" y="590" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#92400E" text-anchor="middle">EXCHANGE RATES (Hardcoded Fallback)</text>
+  <text x="200" y="620" font-family="monospace" font-size="11" fill="#78350F" text-anchor="middle">USD=1.00</text>
+  <text x="350" y="620" font-family="monospace" font-size="11" fill="#78350F" text-anchor="middle">EUR=0.92</text>
+  <text x="500" y="620" font-family="monospace" font-size="11" fill="#78350F" text-anchor="middle">GBP=0.79</text>
+  <text x="650" y="620" font-family="monospace" font-size="11" fill="#78350F" text-anchor="middle">RUB=92.0</text>
+  <text x="800" y="620" font-family="monospace" font-size="11" fill="#78350F" text-anchor="middle">MXN=17.5</text>
+  <text x="950" y="620" font-family="monospace" font-size="11" fill="#78350F" text-anchor="middle">CAD=1.36</text>
+  <text x="200" y="650" font-family="monospace" font-size="11" fill="#78350F" text-anchor="middle">AUD=1.53</text>
+  <text x="350" y="650" font-family="monospace" font-size="11" fill="#78350F" text-anchor="middle">JPY=149.5</text>
+  <text x="500" y="650" font-family="monospace" font-size="11" fill="#78350F" text-anchor="middle">CNY=7.25</text>
+  <text x="650" y="650" font-family="monospace" font-size="11" fill="#78350F" text-anchor="middle">INR=83.0</text>
+  <text x="800" y="650" font-family="monospace" font-size="11" fill="#78350F" text-anchor="middle">BRL=5.00</text>
+</svg>

@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <defs>
+    <linearGradient id="uipathHeader" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FA4616"/>
+      <stop offset="100%" style="stop-color:#E03E12"/>
+    </linearGradient>
+    <linearGradient id="sequence" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6"/>
+      <stop offset="100%" style="stop-color:#2563EB"/>
+    </linearGradient>
+    <linearGradient id="activity" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981"/>
+      <stop offset="100%" style="stop-color:#059669"/>
+    </linearGradient>
+  </defs>
+  
+  <rect width="1200" height="900" fill="#1E293B"/>
+  
+  <!-- UiPath Studio Header -->
+  <rect x="0" y="0" width="1200" height="50" fill="url(#uipathHeader)"/>
+  <text x="100" y="32" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white">UiPath Studio - Main.xaml</text>
+  <rect x="1050" y="10" width="30" height="30" rx="3" fill="#FFF" fill-opacity="0.2"/>
+  <rect x="1090" y="10" width="30" height="30" rx="3" fill="#FFF" fill-opacity="0.2"/>
+  <rect x="1130" y="10" width="30" height="30" rx="3" fill="#FFF" fill-opacity="0.2"/>
+  
+  <!-- Activities Panel (Left) -->
+  <rect x="0" y="50" width="200" height="850" fill="#334155"/>
+  <text x="100" y="80" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#94A3B8" text-anchor="middle">ACTIVITIES</text>
+  <rect x="10" y="100" width="180" height="30" rx="5" fill="#475569"/>
+  <text x="20" y="120" font-family="Arial, sans-serif" font-size="11" fill="#CBD5E1">🔍 Search activities...</text>
+  
+  <text x="15" y="160" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#64748B">FAVORITES</text>
+  <text x="20" y="185" font-family="Arial, sans-serif" font-size="10" fill="#94A3B8">📝 Log Message</text>
+  <text x="20" y="205" font-family="Arial, sans-serif" font-size="10" fill="#94A3B8">✏️ Assign</text>
+  <text x="20" y="225" font-family="Arial, sans-serif" font-size="10" fill="#94A3B8">🔄 For Each</text>
+  <text x="20" y="245" font-family="Arial, sans-serif" font-size="10" fill="#94A3B8">❓ If</text>
+  <text x="20" y="265" font-family="Arial, sans-serif" font-size="10" fill="#94A3B8">🔀 Switch</text>
+  
+  <text x="15" y="300" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#64748B">PDF</text>
+  <text x="20" y="325" font-family="Arial, sans-serif" font-size="10" fill="#94A3B8">📄 Read PDF Text</text>
+  
+  <text x="15" y="360" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#64748B">EXCEL</text>
+  <text x="20" y="385" font-family="Arial, sans-serif" font-size="10" fill="#94A3B8">📊 Excel App Scope</text>
+  <text x="20" y="405" font-family="Arial, sans-serif" font-size="10" fill="#94A3B8">📝 Write Range</text>
+  
+  <text x="15" y="440" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#64748B">UI AUTOMATION</text>
+  <text x="20" y="465" font-family="Arial, sans-serif" font-size="10" fill="#94A3B8">🌐 Open Browser</text>
+  <text x="20" y="485" font-family="Arial, sans-serif" font-size="10" fill="#94A3B8">⌨️ Type Into</text>
+  <text x="20" y="505" font-family="Arial, sans-serif" font-size="10" fill="#94A3B8">🖱️ Click</text>
+  
+  <!-- Main Designer Area -->
+  <rect x="200" y="50" width="700" height="750" fill="#0F172A"/>
+  
+  <!-- Main Sequence -->
+  <rect x="220" y="70" width="660" height="710" rx="10" fill="#1E3A5F" stroke="#3B82F6" stroke-width="2"/>
+  <rect x="220" y="70" width="660" height="35" rx="10" fill="url(#sequence)"/>
+  <text x="550" y="95" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">▼ Sequence: LOAN AUTOMATION - MAIN</text>
+  
+  <!-- Activity 1: Log Start -->
+  <rect x="250" y="120" width="600" height="40" rx="6" fill="url(#activity)"/>
+  <text x="270" y="145" font-family="Arial, sans-serif" font-size="11" fill="white">📝 Log Message: "========== LOAN AUTOMATION STARTED =========="</text>
+  
+  <!-- Activity 2: Build DataTable -->
+  <rect x="250" y="170" width="600" height="40" rx="6" fill="url(#activity)"/>
+  <text x="270" y="195" font-family="Arial, sans-serif" font-size="11" fill="white">📊 Build DataTable: ResultsDT [14 columns]</text>
+  
+  <!-- Activity 3: Assign PDF Files -->
+  <rect x="250" y="220" width="600" height="40" rx="6" fill="url(#activity)"/>
+  <text x="270" y="245" font-family="Arial, sans-serif" font-size="11" fill="white">✏️ Assign: PDFFiles = Directory.GetFiles(PDFFolderPath, "*.pdf")</text>
+  
+  <!-- Activity 4: Open Browser -->
+  <rect x="250" y="270" width="600" height="60" rx="6" fill="#1E40AF" stroke="#60A5FA" stroke-width="1"/>
+  <text x="270" y="295" font-family="Arial, sans-serif" font-size="11" fill="white">🌐 Open Browser: UiBank Registration</text>
+  <text x="290" y="315" font-family="Arial, sans-serif" font-size="10" fill="#93C5FD">└── Fill registration form, create account</text>
+  
+  <!-- Activity 5: For Each -->
+  <rect x="250" y="340" width="600" height="280" rx="6" fill="#312E81" stroke="#818CF8" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="270" y="365" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#A5B4FC">🔄 For Each: PDF in PDFFiles</text>
+  
+  <!-- Inner activities -->
+  <rect x="280" y="380" width="540" height="30" rx="4" fill="#4338CA"/>
+  <text x="300" y="400" font-family="Arial, sans-serif" font-size="10" fill="white">📄 Read PDF Text → [PDFText]</text>
+  
+  <rect x="280" y="420" width="540" height="30" rx="4" fill="#4338CA"/>
+  <text x="300" y="440" font-family="Arial, sans-serif" font-size="10" fill="white">✏️ Assign: Extract Email, Age, Country, Amount... (Regex)</text>
+  
+  <rect x="280" y="460" width="540" height="30" rx="4" fill="#4338CA"/>
+  <text x="300" y="480" font-family="Arial, sans-serif" font-size="10" fill="white">🔀 Switch: Currency → Get ExchangeRate</text>
+  
+  <rect x="280" y="500" width="540" height="30" rx="4" fill="#4338CA"/>
+  <text x="300" y="520" font-family="Arial, sans-serif" font-size="10" fill="white">✏️ Assign: AmountUSD = Amount / ExchangeRate</text>
+  
+  <rect x="280" y="540" width="540" height="30" rx="4" fill="#4338CA"/>
+  <text x="300" y="560" font-family="Arial, sans-serif" font-size="10" fill="white">❓ If: PDFDecision = "APPROVED" → Submit or Skip</text>
+  
+  <rect x="280" y="580" width="540" height="30" rx="4" fill="#4338CA"/>
+  <text x="300" y="600" font-family="Arial, sans-serif" font-size="10" fill="white">➕ Add Data Row → ResultsDT</text>
+  
+  <!-- Activity 6: Excel -->
+  <rect x="250" y="630" width="600" height="50" rx="6" fill="#14532D" stroke="#4ADE80" stroke-width="1"/>
+  <text x="270" y="655" font-family="Arial, sans-serif" font-size="11" fill="white">📊 Excel Application Scope: [OutputExcelPath]</text>
+  <text x="290" y="672" font-family="Arial, sans-serif" font-size="10" fill="#86EFAC">└── Write Range: ResultsDT → "Loan Results"</text>
+  
+  <!-- Activity 7: Message Box -->
+  <rect x="250" y="690" width="600" height="40" rx="6" fill="url(#activity)"/>
+  <text x="270" y="715" font-family="Arial, sans-serif" font-size="11" fill="white">💬 Message Box: "Automation Complete! Processed: X loans"</text>
+  
+  <!-- Properties Panel (Right) -->
+  <rect x="900" y="50" width="300" height="400" fill="#334155"/>
+  <text x="1050" y="80" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#94A3B8" text-anchor="middle">PROPERTIES</text>
+  
+  <text x="920" y="110" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#64748B">COMMON</text>
+  <text x="920" y="135" font-family="Arial, sans-serif" font-size="10" fill="#94A3B8">DisplayName</text>
+  <rect x="920" y="145" width="260" height="25" rx="3" fill="#475569"/>
+  <text x="930" y="162" font-family="Arial, sans-serif" font-size="10" fill="#E2E8F0">LOAN AUTOMATION - MAIN</text>
+  
+  <text x="920" y="200" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#64748B">INPUT</text>
+  <text x="920" y="225" font-family="Arial, sans-serif" font-size="10" fill="#94A3B8">PDFFolderPath</text>
+  <rect x="920" y="235" width="260" height="25" rx="3" fill="#475569"/>
+  <text x="930" y="252" font-family="Arial, sans-serif" font-size="9" fill="#E2E8F0">C:\Users\nikki\Downloads\...</text>
+  
+  <text x="920" y="280" font-family="Arial, sans-serif" font-size="10" fill="#94A3B8">OutputExcelPath</text>
+  <rect x="920" y="290" width="260" height="25" rx="3" fill="#475569"/>
+  <text x="930" y="307" font-family="Arial, sans-serif" font-size="9" fill="#E2E8F0">C:\...\LoanResults.xlsx</text>
+  
+  <!-- Variables Panel (Bottom Right) -->
+  <rect x="900" y="450" width="300" height="350" fill="#334155"/>
+  <text x="1050" y="480" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#94A3B8" text-anchor="middle">VARIABLES</text>
+  
+  <rect x="910" y="500" width="280" height="20" fill="#475569"/>
+  <text x="920" y="515" font-family="Arial, sans-serif" font-size="9" fill="#10B981">PDFFiles</text>
+  <text x="1020" y="515" font-family="Arial, sans-serif" font-size="9" fill="#64748B">List&lt;String&gt;</text>
+  
+  <rect x="910" y="525" width="280" height="20" fill="#3F3F46"/>
+  <text x="920" y="540" font-family="Arial, sans-serif" font-size="9" fill="#10B981">PDFText</text>
+  <text x="1020" y="540" font-family="Arial, sans-serif" font-size="9" fill="#64748B">String</text>
+  
+  <rect x="910" y="550" width="280" height="20" fill="#475569"/>
+  <text x="920" y="565" font-family="Arial, sans-serif" font-size="9" fill="#10B981">Email</text>
+  <text x="1020" y="565" font-family="Arial, sans-serif" font-size="9" fill="#64748B">String</text>
+  
+  <rect x="910" y="575" width="280" height="20" fill="#3F3F46"/>
+  <text x="920" y="590" font-family="Arial, sans-serif" font-size="9" fill="#10B981">AmountUSD</text>
+  <text x="1020" y="590" font-family="Arial, sans-serif" font-size="9" fill="#64748B">Double</text>
+  
+  <rect x="910" y="600" width="280" height="20" fill="#475569"/>
+  <text x="920" y="615" font-family="Arial, sans-serif" font-size="9" fill="#10B981">ResultsDT</text>
+  <text x="1020" y="615" font-family="Arial, sans-serif" font-size="9" fill="#64748B">DataTable</text>
+  
+  <rect x="910" y="625" width="280" height="20" fill="#3F3F46"/>
+  <text x="920" y="640" font-family="Arial, sans-serif" font-size="9" fill="#10B981">SuccessCount</text>
+  <text x="1020" y="640" font-family="Arial, sans-serif" font-size="9" fill="#64748B">Int32</text>
+  
+  <!-- Output Panel -->
+  <rect x="200" y="800" width="700" height="100" fill="#0F172A"/>
+  <text x="220" y="825" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#64748B">OUTPUT</text>
+  <text x="220" y="850" font-family="monospace" font-size="10" fill="#22C55E">[INFO] ========== LOAN AUTOMATION STARTED ==========</text>
+  <text x="220" y="870" font-family="monospace" font-size="10" fill="#22C55E">[INFO] Found 100 PDF files to process</text>
+  <text x="220" y="890" font-family="monospace" font-size="10" fill="#22C55E">[INFO] Processing: loan_app_001_US42851.pdf</text>
+</svg>
