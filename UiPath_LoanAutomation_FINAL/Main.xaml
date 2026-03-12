@@ -1,0 +1,574 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Main"
+  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+  xmlns:sd="clr-namespace:System.Data;assembly=System.Data"
+  xmlns:ui="http://schemas.uipath.com/workflow/activities"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  
+  <Sequence DisplayName="LOAN AUTOMATION - MAIN">
+    <Sequence.Variables>
+      <!-- Configuration -->
+      <Variable x:TypeArguments="x:String" Name="PDFFolderPath" Default="C:\Users\nikki\Downloads\Loan_Applications_Complete_Package" />
+      <Variable x:TypeArguments="x:String" Name="OutputExcelPath" Default="C:\Users\nikki\Downloads\UIBank_Automation-main\UIBank_Automation-main\LoanResults.xlsx" />
+      
+      <!-- PDF Processing Variables -->
+      <Variable x:TypeArguments="scg:List(x:String)" Name="PDFFiles" />
+      <Variable x:TypeArguments="x:String" Name="PDFText" />
+      <Variable x:TypeArguments="x:String" Name="CurrentPDF" />
+      
+      <!-- Extracted Data -->
+      <Variable x:TypeArguments="x:String" Name="ApplicationID" />
+      <Variable x:TypeArguments="x:String" Name="Email" />
+      <Variable x:TypeArguments="x:String" Name="Age" />
+      <Variable x:TypeArguments="x:String" Name="Country" />
+      <Variable x:TypeArguments="x:String" Name="CreditScore" />
+      <Variable x:TypeArguments="x:String" Name="YearlyIncome" />
+      <Variable x:TypeArguments="x:String" Name="LoanType" />
+      <Variable x:TypeArguments="x:String" Name="RequestedAmount" />
+      <Variable x:TypeArguments="x:String" Name="LoanTerm" />
+      <Variable x:TypeArguments="x:String" Name="Currency" />
+      <Variable x:TypeArguments="x:String" Name="EstimatedInterestRate" />
+      <Variable x:TypeArguments="x:String" Name="PDFDecision" />
+      
+      <!-- Converted Values -->
+      <Variable x:TypeArguments="x:Double" Name="AmountUSD" Default="0" />
+      <Variable x:TypeArguments="x:Double" Name="IncomeUSD" Default="0" />
+      <Variable x:TypeArguments="x:Double" Name="ExchangeRate" Default="1" />
+      
+      <!-- UiBank Results -->
+      <Variable x:TypeArguments="x:String" Name="UiBankLoanID" />
+      <Variable x:TypeArguments="x:String" Name="UiBankAPR" />
+      <Variable x:TypeArguments="x:String" Name="UiBankStatus" />
+      <Variable x:TypeArguments="x:Boolean" Name="IsNewApplication" Default="False" />
+      
+      <!-- Account Credentials -->
+      <Variable x:TypeArguments="x:String" Name="BotEmail" />
+      <Variable x:TypeArguments="x:String" Name="BotPassword" />
+      <Variable x:TypeArguments="x:Boolean" Name="AccountCreated" Default="False" />
+      
+      <!-- Results DataTable -->
+      <Variable x:TypeArguments="sd:DataTable" Name="ResultsDT" />
+      
+      <!-- Counters -->
+      <Variable x:TypeArguments="x:Int32" Name="SuccessCount" Default="0" />
+      <Variable x:TypeArguments="x:Int32" Name="FailedCount" Default="0" />
+      <Variable x:TypeArguments="x:Int32" Name="TotalProcessed" Default="0" />
+    </Sequence.Variables>
+    
+    <!-- ==================== STEP 1: INITIALIZE ==================== -->
+    <ui:LogMessage DisplayName="Log: Start" Level="Info" Message="========== LOAN AUTOMATION STARTED ==========" />
+    
+    <!-- Build Results DataTable -->
+    <ui:BuildDataTable DisplayName="Build Results DataTable" DataTable="[ResultsDT]">
+      <ui:BuildDataTable.Columns>
+        <ui:DataTableColumnInfo ColumnName="ApplicationID" />
+        <ui:DataTableColumnInfo ColumnName="Email" />
+        <ui:DataTableColumnInfo ColumnName="Age" />
+        <ui:DataTableColumnInfo ColumnName="Country" />
+        <ui:DataTableColumnInfo ColumnName="LoanType" />
+        <ui:DataTableColumnInfo ColumnName="RequestedAmountUSD" />
+        <ui:DataTableColumnInfo ColumnName="YearlyIncomeUSD" />
+        <ui:DataTableColumnInfo ColumnName="OriginalCurrency" />
+        <ui:DataTableColumnInfo ColumnName="PDFDecision" />
+        <ui:DataTableColumnInfo ColumnName="EstimatedInterestRate" />
+        <ui:DataTableColumnInfo ColumnName="UiBankStatus" />
+        <ui:DataTableColumnInfo ColumnName="UiBankLoanID" />
+        <ui:DataTableColumnInfo ColumnName="UiBankAPR" />
+        <ui:DataTableColumnInfo ColumnName="ProcessedAt" />
+      </ui:BuildDataTable.Columns>
+    </ui:BuildDataTable>
+    
+    <!-- Generate Bot Credentials -->
+    <Assign DisplayName="Generate Bot Email">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[BotEmail]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">["loanbot" &amp; DateTime.Now.ToString("yyyyMMddHHmmss") &amp; "@testmail.com"]</InArgument>
+      </Assign.Value>
+    </Assign>
+    
+    <Assign DisplayName="Generate Bot Password">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[BotPassword]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">["LoanBot123!"]</InArgument>
+      </Assign.Value>
+    </Assign>
+    
+    <!-- ==================== STEP 2: GET PDF FILES ==================== -->
+    <Assign DisplayName="Get PDF Files">
+      <Assign.To>
+        <OutArgument x:TypeArguments="scg:List(x:String)">[PDFFiles]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="scg:List(x:String)">[New List(Of String)(System.IO.Directory.GetFiles(PDFFolderPath, "*.pdf"))]</InArgument>
+      </Assign.Value>
+    </Assign>
+    
+    <ui:LogMessage DisplayName="Log: PDF Count" Level="Info" Message="[&quot;Found &quot; &amp; PDFFiles.Count.ToString() &amp; &quot; PDF files to process&quot;]" />
+    
+    <!-- ==================== STEP 3: CREATE UIBANK ACCOUNT ==================== -->
+    <ui:LogMessage DisplayName="Log: Creating Account" Level="Info" Message="[&quot;Creating UiBank account: &quot; &amp; BotEmail]" />
+    
+    <ui:OpenBrowser DisplayName="Open UiBank Registration" BrowserType="Chrome" Url="https://uibank.uipath.com/register-account">
+      <ui:OpenBrowser.Body>
+        <ActivityAction x:TypeArguments="ui:Browser">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="ui:Browser" Name="regBrowser" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Register Account">
+            <Delay DisplayName="Wait Page Load" Duration="[TimeSpan.FromSeconds(3)]" />
+            
+            <!-- Fill Registration Form -->
+            <ui:TypeInto DisplayName="Type Email" Text="[BotEmail]">
+              <ui:TypeInto.Target>
+                <ui:Target Selector="&lt;html app='chrome.exe' title='UiBank-Register' /&gt;&lt;webctrl tag='INPUT' type='email' /&gt;" />
+              </ui:TypeInto.Target>
+            </ui:TypeInto>
+            
+            <ui:TypeInto DisplayName="Type Password" Text="[BotPassword]">
+              <ui:TypeInto.Target>
+                <ui:Target Selector="&lt;html app='chrome.exe' title='UiBank-Register' /&gt;&lt;webctrl tag='INPUT' type='password' /&gt;" />
+              </ui:TypeInto.Target>
+            </ui:TypeInto>
+            
+            <ui:TypeInto DisplayName="Type First Name" Text="Loan">
+              <ui:TypeInto.Target>
+                <ui:Target Selector="&lt;html app='chrome.exe' title='UiBank-Register' /&gt;&lt;webctrl tag='INPUT' placeholder='First Name' /&gt;" />
+              </ui:TypeInto.Target>
+            </ui:TypeInto>
+            
+            <ui:TypeInto DisplayName="Type Last Name" Text="Automation">
+              <ui:TypeInto.Target>
+                <ui:Target Selector="&lt;html app='chrome.exe' title='UiBank-Register' /&gt;&lt;webctrl tag='INPUT' placeholder='Last Name' /&gt;" />
+              </ui:TypeInto.Target>
+            </ui:TypeInto>
+            
+            <ui:SelectItem DisplayName="Select Sex" Item="Male">
+              <ui:SelectItem.Target>
+                <ui:Target Selector="&lt;html app='chrome.exe' title='UiBank-Register' /&gt;&lt;webctrl tag='SELECT' id='sex' /&gt;" />
+              </ui:SelectItem.Target>
+            </ui:SelectItem>
+            
+            <ui:SelectItem DisplayName="Select Title" Item="Mr">
+              <ui:SelectItem.Target>
+                <ui:Target Selector="&lt;html app='chrome.exe' title='UiBank-Register' /&gt;&lt;webctrl tag='SELECT' id='title' /&gt;" />
+              </ui:SelectItem.Target>
+            </ui:SelectItem>
+            
+            <ui:SelectItem DisplayName="Select Employment" Item="Full-time">
+              <ui:SelectItem.Target>
+                <ui:Target Selector="&lt;html app='chrome.exe' title='UiBank-Register' /&gt;&lt;webctrl tag='SELECT' id='emp_status' /&gt;" />
+              </ui:SelectItem.Target>
+            </ui:SelectItem>
+            
+            <ui:TypeInto DisplayName="Type DOB" Text="01/01/1990">
+              <ui:TypeInto.Target>
+                <ui:Target Selector="&lt;html app='chrome.exe' title='UiBank-Register' /&gt;&lt;webctrl tag='INPUT' placeholder='Date of birth*' /&gt;" />
+              </ui:TypeInto.Target>
+            </ui:TypeInto>
+            
+            <ui:SelectItem DisplayName="Select Marital" Item="Single">
+              <ui:SelectItem.Target>
+                <ui:Target Selector="&lt;html app='chrome.exe' title='UiBank-Register' /&gt;&lt;webctrl tag='SELECT' id='marital_status' /&gt;" />
+              </ui:SelectItem.Target>
+            </ui:SelectItem>
+            
+            <ui:TypeInto DisplayName="Type Dependents" Text="0">
+              <ui:TypeInto.Target>
+                <ui:Target Selector="&lt;html app='chrome.exe' title='UiBank-Register' /&gt;&lt;webctrl tag='INPUT' placeholder='Number of Dependents' /&gt;" />
+              </ui:TypeInto.Target>
+            </ui:TypeInto>
+            
+            <ui:TypeInto DisplayName="Type Username" Text="[&quot;loanbot&quot; &amp; DateTime.Now.ToString(&quot;HHmmss&quot;)]">
+              <ui:TypeInto.Target>
+                <ui:Target Selector="&lt;html app='chrome.exe' title='UiBank-Register' /&gt;&lt;webctrl tag='INPUT' placeholder='Username*' /&gt;" />
+              </ui:TypeInto.Target>
+            </ui:TypeInto>
+            
+            <!-- Click Privacy Checkbox -->
+            <ui:Click DisplayName="Click Privacy Checkbox">
+              <ui:Click.Target>
+                <ui:Target Selector="&lt;html app='chrome.exe' title='UiBank-Register' /&gt;&lt;webctrl tag='INPUT' type='checkbox' /&gt;" />
+              </ui:Click.Target>
+            </ui:Click>
+            
+            <!-- Click Register -->
+            <ui:Click DisplayName="Click Register">
+              <ui:Click.Target>
+                <ui:Target Selector="&lt;html app='chrome.exe' title='UiBank-Register' /&gt;&lt;webctrl tag='BUTTON' innertext='Register' /&gt;" />
+              </ui:Click.Target>
+            </ui:Click>
+            
+            <Delay DisplayName="Wait Registration" Duration="[TimeSpan.FromSeconds(3)]" />
+            
+          </Sequence>
+        </ActivityAction>
+      </ui:OpenBrowser.Body>
+    </ui:OpenBrowser>
+    
+    <Assign DisplayName="Set Account Created">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:Boolean">[AccountCreated]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:Boolean">[True]</InArgument>
+      </Assign.Value>
+    </Assign>
+    
+    <ui:LogMessage DisplayName="Log: Account Created" Level="Info" Message="[&quot;Account created: &quot; &amp; BotEmail]" />
+    
+    <!-- ==================== STEP 4: PROCESS EACH PDF ==================== -->
+    <ForEach x:TypeArguments="x:String" DisplayName="For Each PDF" Values="[PDFFiles]">
+      <ActivityAction x:TypeArguments="x:String">
+        <ActivityAction.Argument>
+          <DelegateInArgument x:TypeArguments="x:String" Name="pdfPath" />
+        </ActivityAction.Argument>
+        
+        <TryCatch DisplayName="Try Process PDF">
+          <TryCatch.Try>
+            <Sequence DisplayName="Process Single PDF">
+              
+              <Assign DisplayName="Set Current PDF">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:String">[CurrentPDF]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:String">[pdfPath]</InArgument>
+                </Assign.Value>
+              </Assign>
+              
+              <ui:LogMessage DisplayName="Log: Processing" Level="Info" Message="[&quot;Processing: &quot; &amp; System.IO.Path.GetFileName(pdfPath)]" />
+              
+              <!-- ========== EXTRACT PDF DATA ========== -->
+              <ui:ReadPDFText DisplayName="Read PDF" FileName="[pdfPath]" Text="[PDFText]" />
+              
+              <!-- Extract Application ID -->
+              <Assign DisplayName="Extract App ID">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:String">[ApplicationID]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:String">[If(System.Text.RegularExpressions.Regex.IsMatch(PDFText, "Application ID[:\s]*(\S+)"), System.Text.RegularExpressions.Regex.Match(PDFText, "Application ID[:\s]*(\S+)").Groups(1).Value.Trim(), "NEW")]</InArgument>
+                </Assign.Value>
+              </Assign>
+              
+              <!-- Extract Email -->
+              <Assign DisplayName="Extract Email">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:String">[Email]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:String">[If(System.Text.RegularExpressions.Regex.IsMatch(PDFText, "Email Address\s+(\S+@\S+)"), System.Text.RegularExpressions.Regex.Match(PDFText, "Email Address\s+(\S+@\S+)").Groups(1).Value.Trim(), "")]</InArgument>
+                </Assign.Value>
+              </Assign>
+              
+              <!-- Extract Age -->
+              <Assign DisplayName="Extract Age">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:String">[Age]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:String">[If(System.Text.RegularExpressions.Regex.IsMatch(PDFText, "Age\s+(\d+)"), System.Text.RegularExpressions.Regex.Match(PDFText, "Age\s+(\d+)").Groups(1).Value.Trim(), "0")]</InArgument>
+                </Assign.Value>
+              </Assign>
+              
+              <!-- Extract Country -->
+              <Assign DisplayName="Extract Country">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:String">[Country]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:String">[If(System.Text.RegularExpressions.Regex.IsMatch(PDFText, "Country\s+([A-Za-z\s]+?)(?=Credit|$)"), System.Text.RegularExpressions.Regex.Match(PDFText, "Country\s+([A-Za-z\s]+?)(?=Credit|$)").Groups(1).Value.Trim(), "")]</InArgument>
+                </Assign.Value>
+              </Assign>
+              
+              <!-- Extract Yearly Income with Currency -->
+              <Assign DisplayName="Extract Income">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:String">[YearlyIncome]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:String">[If(System.Text.RegularExpressions.Regex.IsMatch(PDFText, "Yearly Income\s+[A-Z]{3}\s+([0-9,]+)"), System.Text.RegularExpressions.Regex.Match(PDFText, "Yearly Income\s+[A-Z]{3}\s+([0-9,]+)").Groups(1).Value.Replace(",", "").Trim(), "0")]</InArgument>
+                </Assign.Value>
+              </Assign>
+              
+              <!-- Extract Currency -->
+              <Assign DisplayName="Extract Currency">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:String">[Currency]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:String">[If(System.Text.RegularExpressions.Regex.IsMatch(PDFText, "Yearly Income\s+([A-Z]{3})"), System.Text.RegularExpressions.Regex.Match(PDFText, "Yearly Income\s+([A-Z]{3})").Groups(1).Value.Trim(), "USD")]</InArgument>
+                </Assign.Value>
+              </Assign>
+              
+              <!-- Extract Loan Type -->
+              <Assign DisplayName="Extract Loan Type">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:String">[LoanType]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:String">[If(System.Text.RegularExpressions.Regex.IsMatch(PDFText, "Loan Type\s+([A-Za-z\s]+?)(?=Requested|$)"), System.Text.RegularExpressions.Regex.Match(PDFText, "Loan Type\s+([A-Za-z\s]+?)(?=Requested|$)").Groups(1).Value.Trim(), "")]</InArgument>
+                </Assign.Value>
+              </Assign>
+              
+              <!-- Extract Requested Amount -->
+              <Assign DisplayName="Extract Amount">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:String">[RequestedAmount]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:String">[If(System.Text.RegularExpressions.Regex.IsMatch(PDFText, "Requested Amount\s+[A-Z]{3}\s+([0-9,]+)"), System.Text.RegularExpressions.Regex.Match(PDFText, "Requested Amount\s+[A-Z]{3}\s+([0-9,]+)").Groups(1).Value.Replace(",", "").Trim(), "0")]</InArgument>
+                </Assign.Value>
+              </Assign>
+              
+              <!-- Extract Interest Rate -->
+              <Assign DisplayName="Extract Interest Rate">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:String">[EstimatedInterestRate]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:String">[If(System.Text.RegularExpressions.Regex.IsMatch(PDFText, "Estimated Interest Rate\s+([0-9.]+)%"), System.Text.RegularExpressions.Regex.Match(PDFText, "Estimated Interest Rate\s+([0-9.]+)%").Groups(1).Value.Trim() &amp; "%", "0%")]</InArgument>
+                </Assign.Value>
+              </Assign>
+              
+              <!-- Extract PDF Decision -->
+              <Assign DisplayName="Extract PDF Decision">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:String">[PDFDecision]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:String">[If(PDFText.Contains("APPROVED"), "APPROVED", If(PDFText.Contains("DECLINED"), "DECLINED", "UNKNOWN"))]</InArgument>
+                </Assign.Value>
+              </Assign>
+              
+              <!-- Check if New Application -->
+              <Assign DisplayName="Check New Application">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:Boolean">[IsNewApplication]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:Boolean">[ApplicationID.ToLower().Contains("new")]</InArgument>
+                </Assign.Value>
+              </Assign>
+              
+              <!-- ========== CONVERT CURRENCY ========== -->
+              <Switch x:TypeArguments="x:String" DisplayName="Get Exchange Rate" Expression="[Currency]">
+                <Case x:Key="USD">
+                  <Assign><Assign.To><OutArgument x:TypeArguments="x:Double">[ExchangeRate]</OutArgument></Assign.To><Assign.Value><InArgument x:TypeArguments="x:Double">[1.0]</InArgument></Assign.Value></Assign>
+                </Case>
+                <Case x:Key="EUR">
+                  <Assign><Assign.To><OutArgument x:TypeArguments="x:Double">[ExchangeRate]</OutArgument></Assign.To><Assign.Value><InArgument x:TypeArguments="x:Double">[0.92]</InArgument></Assign.Value></Assign>
+                </Case>
+                <Case x:Key="GBP">
+                  <Assign><Assign.To><OutArgument x:TypeArguments="x:Double">[ExchangeRate]</OutArgument></Assign.To><Assign.Value><InArgument x:TypeArguments="x:Double">[0.79]</InArgument></Assign.Value></Assign>
+                </Case>
+                <Case x:Key="RUB">
+                  <Assign><Assign.To><OutArgument x:TypeArguments="x:Double">[ExchangeRate]</OutArgument></Assign.To><Assign.Value><InArgument x:TypeArguments="x:Double">[92.0]</InArgument></Assign.Value></Assign>
+                </Case>
+                <Case x:Key="MXN">
+                  <Assign><Assign.To><OutArgument x:TypeArguments="x:Double">[ExchangeRate]</OutArgument></Assign.To><Assign.Value><InArgument x:TypeArguments="x:Double">[17.5]</InArgument></Assign.Value></Assign>
+                </Case>
+                <Case x:Key="CAD">
+                  <Assign><Assign.To><OutArgument x:TypeArguments="x:Double">[ExchangeRate]</OutArgument></Assign.To><Assign.Value><InArgument x:TypeArguments="x:Double">[1.36]</InArgument></Assign.Value></Assign>
+                </Case>
+                <Case x:Key="AUD">
+                  <Assign><Assign.To><OutArgument x:TypeArguments="x:Double">[ExchangeRate]</OutArgument></Assign.To><Assign.Value><InArgument x:TypeArguments="x:Double">[1.53]</InArgument></Assign.Value></Assign>
+                </Case>
+                <Case x:Key="JPY">
+                  <Assign><Assign.To><OutArgument x:TypeArguments="x:Double">[ExchangeRate]</OutArgument></Assign.To><Assign.Value><InArgument x:TypeArguments="x:Double">[149.5]</InArgument></Assign.Value></Assign>
+                </Case>
+                <Case x:Key="CNY">
+                  <Assign><Assign.To><OutArgument x:TypeArguments="x:Double">[ExchangeRate]</OutArgument></Assign.To><Assign.Value><InArgument x:TypeArguments="x:Double">[7.25]</InArgument></Assign.Value></Assign>
+                </Case>
+                <Case x:Key="INR">
+                  <Assign><Assign.To><OutArgument x:TypeArguments="x:Double">[ExchangeRate]</OutArgument></Assign.To><Assign.Value><InArgument x:TypeArguments="x:Double">[83.0]</InArgument></Assign.Value></Assign>
+                </Case>
+                <Case x:Key="BRL">
+                  <Assign><Assign.To><OutArgument x:TypeArguments="x:Double">[ExchangeRate]</OutArgument></Assign.To><Assign.Value><InArgument x:TypeArguments="x:Double">[5.0]</InArgument></Assign.Value></Assign>
+                </Case>
+                <Default>
+                  <Assign><Assign.To><OutArgument x:TypeArguments="x:Double">[ExchangeRate]</OutArgument></Assign.To><Assign.Value><InArgument x:TypeArguments="x:Double">[1.0]</InArgument></Assign.Value></Assign>
+                </Default>
+              </Switch>
+              
+              <!-- Convert to USD -->
+              <Assign DisplayName="Convert Amount to USD">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:Double">[AmountUSD]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:Double">[Math.Round(Double.Parse(RequestedAmount) / ExchangeRate, 2)]</InArgument>
+                </Assign.Value>
+              </Assign>
+              
+              <Assign DisplayName="Convert Income to USD">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:Double">[IncomeUSD]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:Double">[Math.Round(Double.Parse(YearlyIncome) / ExchangeRate, 2)]</InArgument>
+                </Assign.Value>
+              </Assign>
+              
+              <ui:LogMessage DisplayName="Log: Extracted" Level="Info" Message="[&quot;Extracted - Email: &quot; &amp; Email &amp; &quot;, Amount: $&quot; &amp; AmountUSD.ToString() &amp; &quot;, Decision: &quot; &amp; PDFDecision]" />
+              
+              <!-- ========== SUBMIT TO UIBANK (Only if APPROVED in PDF) ========== -->
+              <If Condition="[PDFDecision = &quot;APPROVED&quot;]" DisplayName="If PDF Approved">
+                <If.Then>
+                  <Sequence DisplayName="Submit to UiBank">
+                    
+                    <!-- Set default values -->
+                    <Assign DisplayName="Set Default Status">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:String">[UiBankStatus]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:String">["SUBMITTED"]</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    
+                    <Assign DisplayName="Set Default LoanID">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:String">[UiBankLoanID]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:String">[ApplicationID]</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    
+                    <Assign DisplayName="Set Default APR">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:String">[UiBankAPR]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:String">[EstimatedInterestRate]</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    
+                    <ui:LogMessage DisplayName="Log: Submitting" Level="Info" Message="[&quot;Submitting to UiBank: &quot; &amp; Email]" />
+                    
+                    <!-- Note: UiBank loan form requires login, simplified for demo -->
+                    <!-- In production, add full form submission here -->
+                    
+                  </Sequence>
+                </If.Then>
+                <If.Else>
+                  <Sequence DisplayName="Skip Declined">
+                    <Assign DisplayName="Set Declined Status">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:String">[UiBankStatus]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:String">["SKIPPED-PDF_DECLINED"]</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    
+                    <Assign DisplayName="Set NA LoanID">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:String">[UiBankLoanID]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:String">["N/A"]</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    
+                    <Assign DisplayName="Set NA APR">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:String">[UiBankAPR]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:String">["N/A"]</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    
+                    <ui:LogMessage DisplayName="Log: Skipped" Level="Warn" Message="[&quot;Skipping declined application: &quot; &amp; Email]" />
+                  </Sequence>
+                </If.Else>
+              </If>
+              
+              <!-- ========== ADD TO RESULTS ========== -->
+              <ui:AddDataRow DisplayName="Add Result Row" DataTable="[ResultsDT]">
+                <ui:AddDataRow.ArrayRow>
+                  <InArgument x:TypeArguments="x:Object[]">[{
+                    ApplicationID,
+                    Email,
+                    Age,
+                    Country,
+                    LoanType,
+                    AmountUSD.ToString(),
+                    IncomeUSD.ToString(),
+                    Currency,
+                    PDFDecision,
+                    EstimatedInterestRate,
+                    UiBankStatus,
+                    UiBankLoanID,
+                    UiBankAPR,
+                    DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                  }]</InArgument>
+                </ui:AddDataRow.ArrayRow>
+              </ui:AddDataRow>
+              
+              <Assign DisplayName="Increment Success">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:Int32">[SuccessCount]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:Int32">[SuccessCount + 1]</InArgument>
+                </Assign.Value>
+              </Assign>
+              
+            </Sequence>
+          </TryCatch.Try>
+          <TryCatch.Catches>
+            <Catch x:TypeArguments="s:Exception" xmlns:s="clr-namespace:System;assembly=mscorlib">
+              <ActivityAction x:TypeArguments="s:Exception">
+                <ActivityAction.Argument>
+                  <DelegateInArgument x:TypeArguments="s:Exception" Name="ex" />
+                </ActivityAction.Argument>
+                <Sequence DisplayName="Handle Error">
+                  <ui:LogMessage DisplayName="Log Error" Level="Error" Message="[&quot;Error: &quot; &amp; ex.Message]" />
+                  <Assign DisplayName="Increment Failed">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="x:Int32">[FailedCount]</OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="x:Int32">[FailedCount + 1]</InArgument>
+                    </Assign.Value>
+                  </Assign>
+                </Sequence>
+              </ActivityAction>
+            </Catch>
+          </TryCatch.Catches>
+        </TryCatch>
+        
+      </ActivityAction>
+    </ForEach>
+    
+    <!-- ==================== STEP 5: WRITE EXCEL REPORT ==================== -->
+    <ui:LogMessage DisplayName="Log: Writing Excel" Level="Info" Message="[&quot;Writing Excel report: &quot; &amp; ResultsDT.Rows.Count.ToString() &amp; &quot; rows&quot;]" />
+    
+    <ui:ExcelApplicationScope DisplayName="Excel Scope" WorkbookPath="[OutputExcelPath]">
+      <ui:ExcelApplicationScope.Body>
+        <ActivityAction x:TypeArguments="ui:WorkbookApplication">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="ui:WorkbookApplication" Name="ExcelWorkbook" />
+          </ActivityAction.Argument>
+          <ui:WriteRange DisplayName="Write Results" DataTable="[ResultsDT]" SheetName="Loan Results" StartingCell="A1" AddHeaders="True" />
+        </ActivityAction>
+      </ui:ExcelApplicationScope.Body>
+    </ui:ExcelApplicationScope>
+    
+    <!-- ==================== FINAL SUMMARY ==================== -->
+    <ui:LogMessage DisplayName="Log: Complete" Level="Info" Message="[&quot;========== AUTOMATION COMPLETE ==========&quot; &amp; vbCrLf &amp; &quot;Successful: &quot; &amp; SuccessCount.ToString() &amp; vbCrLf &amp; &quot;Failed: &quot; &amp; FailedCount.ToString() &amp; vbCrLf &amp; &quot;Results saved to: &quot; &amp; OutputExcelPath]" />
+    
+    <ui:MessageBox DisplayName="Show Complete" Buttons="Ok" Caption="Automation Complete" Text="[&quot;Processed: &quot; &amp; SuccessCount.ToString() &amp; &quot; loans&quot; &amp; vbCrLf &amp; &quot;Results saved to: &quot; &amp; OutputExcelPath]" />
+    
+  </Sequence>
+</Activity>
